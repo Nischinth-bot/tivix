@@ -50,39 +50,79 @@ export default {
     };
   },
   methods: {
+    /** Helper method */
     doInsert() {
       this.showInput = !this.showInput;
     },
+
+    /** Helper method to update the temperature array */
     updateTemps() {
       if (this.insertedValue === "") {
         return;
       }
-      console.log("Here");
       this.temperatures.push(this.insertedValue);
       this.calculate();
     },
+
+    /** Sets the max field to the maximum of the temperatures array. */
     calcMax() {
       this.max = Math.max(...this.temperatures);
     },
+
+    /** Sets the min field to the minimum of the temperatures array. */
     calcMin() {
       this.min = Math.min(...this.temperatures);
     },
+
+    /** Sets the median field to the median of the temperatures array. */
     calcMedian() {
       const idx = Math.round(this.temperatures.length / 2);
       this.median = this.temperatures[idx];
     },
+    /**
+     * Use a Map to maintain the obtain of each unique element in the temperature array.
+     * Sets the mode field with the correct mode of the temperature array.
+     */
+    calcMode() {
+
+      // Get the Mapping of (val, count)
+      const map = new Map();
+      for (const idx in this.temperatures) {
+        const key = this.temperatures[idx];
+        if (!map.has(key)) {
+          map.set(key, 0);
+        } else {
+          map.set(key, map.get(key) + 1);
+        }
+      }
+
+      // Set the mode as the val with the maximum count
+      var last_freq = 0;
+      console.log(map);
+      for (var key of map.keys()) {
+        if (map.get(key) > last_freq) {
+          this.mode = key;
+          last_freq = map.get(key);
+        }
+      }
+    },
+
+    /** Helper method */
     calculate() {
-      console.log("Calculating..");
       this.calcMax();
       this.calcMin();
       this.calcMedian();
+      this.calcMode();
     },
   },
+
+  /** HTTP requests, data loading .... etc */
   async mounted() {
     if (!this.cityName) {
       this.uninitiated = true;
     } else {
       try {
+        this.isLoading = true;
         const url = `https:api.openweathermap.org/data/2.5/forecast?q=${this.cityName}&appid=e79077ad8ef70a0346800c89e65e6795&units=metric`;
         const response = await fetch(url);
         const obj = await response.json();
@@ -91,6 +131,8 @@ export default {
           this.temperatures.push(allDays[key].main.temp);
         }
         this.calculate();
+        this.mode = this.temperatures[0];
+        this.isLoading = false;
       } catch (err) {
         console.log(err);
       }
