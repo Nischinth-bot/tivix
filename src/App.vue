@@ -58,8 +58,7 @@ export default {
 }
 
 .header img{
-  height: 100px;
+  height:100px;
   width: 100px;
-  margin-left: 2rem;
 }
 </style>

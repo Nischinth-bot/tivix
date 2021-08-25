@@ -4,25 +4,25 @@
     <div class="container" v-else>
       <h2 class="cityName">{{ cityName }}</h2>
       <div class="obj">
-        <base-button @click="doInsert()"> Insert </base-button>
-        <input type="number" v-model.number="insertedValue" v-if="showInput" />
-        <button v-if="showInput" @click="updateTemps()">OK</button>
+        <h2>Insert</h2>
+        <input type="number" v-model.number="insertedValue" />
+        <button class="brown-button" @click="updateTemps()">OK</button>
       </div>
       <div class="obj">
         <h2 style="color: green">Min</h2>
-        <h3>{{ min }}</h3>
+        <h3>{{ min }} &#176; C</h3>
       </div>
       <div class="obj">
         <h2 style="color: red">Max</h2>
-        <h3>{{ max }}</h3>
+        <h3>{{ max }} &#176; C</h3>
       </div>
       <div class="obj">
         <h2 style="color: orange">Median</h2>
-        <h3>{{ median }}</h3>
+        <h3>{{ median }} &#176; C</h3>
       </div>
       <div class="obj">
         <h2 style="color: purple">Mode</h2>
-        <h3>{{ mode }}</h3>
+        <h3>{{ mode }} &#176; C</h3>
       </div>
       <p v-if="uninitiated" style="color: red">
         The data tracker has not been initiated!
@@ -32,9 +32,7 @@
 </template>
 
 <script>
-import BaseButton from "./wrappers/BaseButton.vue";
 export default {
-  components: { BaseButton },
   props: ["cityName"],
   data() {
     return {
@@ -84,7 +82,6 @@ export default {
      * Sets the mode field with the correct mode of the temperature array.
      */
     calcMode() {
-
       // Get the Mapping of (val, count)
       const map = new Map();
       for (const idx in this.temperatures) {
@@ -131,7 +128,6 @@ export default {
           this.temperatures.push(allDays[key].main.temp);
         }
         this.calculate();
-        this.mode = this.temperatures[0];
         this.isLoading = false;
       } catch (err) {
         console.log(err);
@@ -155,12 +151,30 @@ export default {
   display: flex;
   width: 16.66%;
   flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
   border: 1px solid black;
 }
 
 .cityName {
   margin-right: 1rem;
   width: 10.66%;
+}
+
+.brown-button {
+  background: brown;
+  color: white;
+  cursor: pointer;
+  width: 50px;
+}
+
+.brown-button:hover {
+  background: rgb(138, 37, 37);
+}
+
+input {
+  width: 15%;
+  border: 1px solid black;
 }
 </style>
 
