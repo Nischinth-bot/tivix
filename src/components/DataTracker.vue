@@ -13,19 +13,19 @@
     </div>
     <div class="obj">
       <base-button @click="doMin()"> Min </base-button>
-      <h3 v-if="showMin">{{ min }}</h3>
+      <h3>{{ min }}</h3>
     </div>
     <div class="obj">
       <base-button @click="doMax()"> Max </base-button>
-      <h3 v-if="showMax">{{ max }}</h3>
+      <h3>{{ max }}</h3>
     </div>
     <div class="obj">
       <base-button @click="doMedian()"> Median </base-button>
-      <h3 v-if="showMedian">{{ median }}</h3>
+      <h3>{{ median }}</h3>
     </div>
     <div class="obj">
       <base-button @click="doMode()"> Mode </base-button>
-      <h3 v-if="showMode">{{ mode }}</h3>
+      <h3>{{ mode }}</h3>
     </div>
     <p v-if="uninitiated" style="color: red">
       The data tracker has not been initiated!
@@ -47,10 +47,6 @@ export default {
       median: 0.0,
       mode: 0.0,
       showInput: false,
-      showMin: true,
-      showMax: true,
-      showMedian: true,
-      showMode: true,
       uninitiated: false,
     };
   },
@@ -63,11 +59,18 @@ export default {
     if (!this.cityName) {
       this.uninitiated = true;
     } else {
-      console.log("Here");
-      const url = `https://api.openweathermap.org/data/2.5/weather?q=${this.cityName}&appid=e79077ad8ef70a0346800c89e65e6795`;
       try {
-        const response = (await fetch(url)).json();
-        console.log(response);
+        const url = `https:api.openweathermap.org/data/2.5/forecast?q=${this.cityName}&appid=e79077ad8ef70a0346800c89e65e6795&units=metric`;
+        const response = await fetch(url);
+        const obj = await response.json();
+        const allDays = obj.list;
+        for (const key in allDays) {
+          this.temperatures.push(console.log(allDays[key].main.temp));
+        }
+        this.calcMax();
+        this.calcMin();
+        this.calcMedian();
+        this.calcMode();
       } catch (err) {
         console.log(err);
       }
