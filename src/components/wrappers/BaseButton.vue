@@ -34,7 +34,7 @@ button,
 a {
   text-decoration: none;
   padding: 0.75rem 1.5rem;
-  min-width: 12rem;
+  width: 12rem;
   font: inherit;
   background-color: black;
   color: gold;
