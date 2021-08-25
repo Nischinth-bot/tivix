@@ -3,28 +3,23 @@
     <h2>{{ cityName }}</h2>
     <div class="obj">
       <base-button @click="doInsert()"> Insert </base-button>
-      <input
-        type="number"
-        v-model="insertedValue"
-        v-if="showInput"
-        @click="temperatures.push(insertedValue)"
-      />
-      <button v-if="showInput">OK</button>
+      <input type="number" v-model.number="insertedValue" v-if="showInput" />
+      <button v-if="showInput" @click="updateTemps()">OK</button>
     </div>
     <div class="obj">
-      <base-button @click="doMin()"> Min </base-button>
+      <h2 style="color: green">Min</h2>
       <h3>{{ min }}</h3>
     </div>
     <div class="obj">
-      <base-button @click="doMax()"> Max </base-button>
+      <h2 style="color: red">Max</h2>
       <h3>{{ max }}</h3>
     </div>
     <div class="obj">
-      <base-button @click="doMedian()"> Median </base-button>
+      <h2 style="color: orange">Median</h2>
       <h3>{{ median }}</h3>
     </div>
     <div class="obj">
-      <base-button @click="doMode()"> Mode </base-button>
+      <h2 style="color: purple">Mode</h2>
       <h3>{{ mode }}</h3>
     </div>
     <p v-if="uninitiated" style="color: red">
@@ -54,6 +49,30 @@ export default {
     doInsert() {
       this.showInput = !this.showInput;
     },
+    updateTemps() {
+      if (this.insertedValue === "") {
+        return;
+      }
+      console.log("Here");
+      this.temperatures.push(this.insertedValue);
+      this.calculate();
+    },
+    calcMax() {
+      this.max = Math.max(...this.temperatures);
+    },
+    calcMin() {
+      this.min = Math.min(...this.temperatures);
+    },
+    calcMedian() {
+      const idx = Math.round(this.temperatures.length / 2);
+      this.median = this.temperatures[idx];
+    },
+    calculate() {
+      console.log("Calculating..");
+      this.calcMax();
+      this.calcMin();
+      this.calcMedian();
+    },
   },
   async mounted() {
     if (!this.cityName) {
@@ -65,12 +84,9 @@ export default {
         const obj = await response.json();
         const allDays = obj.list;
         for (const key in allDays) {
-          this.temperatures.push(console.log(allDays[key].main.temp));
+          this.temperatures.push(allDays[key].main.temp);
         }
-        this.calcMax();
-        this.calcMin();
-        this.calcMedian();
-        this.calcMode();
+        this.calculate();
       } catch (err) {
         console.log(err);
       }
@@ -84,11 +100,15 @@ export default {
 .container {
   display: flex;
   margin: 2rem;
+  width: 100%;
 }
 
 .obj {
   display: flex;
+  width: 16.66%;
   flex-direction: column;
+  border: 1px solid black;
 }
+
 </style>
 
