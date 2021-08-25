@@ -1,30 +1,33 @@
 <template>
-  <div class="container">
-    <h2>{{ cityName }}</h2>
-    <div class="obj">
-      <base-button @click="doInsert()"> Insert </base-button>
-      <input type="number" v-model.number="insertedValue" v-if="showInput" />
-      <button v-if="showInput" @click="updateTemps()">OK</button>
+  <div class="wrapper">
+    <base-spinner v-if="isLoading"> </base-spinner>
+    <div class="container" v-else>
+      <h2 class="cityName">{{ cityName }}</h2>
+      <div class="obj">
+        <base-button @click="doInsert()"> Insert </base-button>
+        <input type="number" v-model.number="insertedValue" v-if="showInput" />
+        <button v-if="showInput" @click="updateTemps()">OK</button>
+      </div>
+      <div class="obj">
+        <h2 style="color: green">Min</h2>
+        <h3>{{ min }}</h3>
+      </div>
+      <div class="obj">
+        <h2 style="color: red">Max</h2>
+        <h3>{{ max }}</h3>
+      </div>
+      <div class="obj">
+        <h2 style="color: orange">Median</h2>
+        <h3>{{ median }}</h3>
+      </div>
+      <div class="obj">
+        <h2 style="color: purple">Mode</h2>
+        <h3>{{ mode }}</h3>
+      </div>
+      <p v-if="uninitiated" style="color: red">
+        The data tracker has not been initiated!
+      </p>
     </div>
-    <div class="obj">
-      <h2 style="color: green">Min</h2>
-      <h3>{{ min }}</h3>
-    </div>
-    <div class="obj">
-      <h2 style="color: red">Max</h2>
-      <h3>{{ max }}</h3>
-    </div>
-    <div class="obj">
-      <h2 style="color: orange">Median</h2>
-      <h3>{{ median }}</h3>
-    </div>
-    <div class="obj">
-      <h2 style="color: purple">Mode</h2>
-      <h3>{{ mode }}</h3>
-    </div>
-    <p v-if="uninitiated" style="color: red">
-      The data tracker has not been initiated!
-    </p>
   </div>
 </template>
 
@@ -43,6 +46,7 @@ export default {
       mode: 0.0,
       showInput: false,
       uninitiated: false,
+      isLoading: false,
     };
   },
   methods: {
@@ -102,7 +106,9 @@ export default {
   margin: 2rem;
   width: 100%;
 }
-
+.wrapper {
+  width: 100%;
+}
 .obj {
   display: flex;
   width: 16.66%;
@@ -110,5 +116,9 @@ export default {
   border: 1px solid black;
 }
 
+.cityName {
+  margin-right: 1rem;
+  width: 10.66%;
+}
 </style>
 

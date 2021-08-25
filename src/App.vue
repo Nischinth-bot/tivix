@@ -1,5 +1,9 @@
 <template>
   <div class="app">
+    <div class="header">
+      <h1>TIVIX TEST</h1>
+      <img src="./assets/sunny.png" />
+    </div>
     <label for="text"> Target City </label>
     <textarea class="text" v-model="newCity"> </textarea>
     <base-button @click="addNewCity()"> Ok </base-button>
@@ -47,5 +51,15 @@ export default {
   width: 200px;
   font-size: 20px;
   align-self: center;
+}
+
+.header{
+  display: flex;
+}
+
+.header img{
+  height: 100px;
+  width: 100px;
+  margin-left: 2rem;
 }
 </style>
